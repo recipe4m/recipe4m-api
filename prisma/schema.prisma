@@ -10,3 +10,207 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Food {
+  id           Int       @id @default(autoincrement())
+  name         String
+  thumbnailUrl String?   @map("thumbnail_url")
+  imageUrl     String?   @map("image_url")
+  cookingTime  Float     @map("cooking_time")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  deletedAt    DateTime? @map("deleted_at")
+
+  @@map("food")
+}
+
+model Category {
+  id          Int       @id @default(autoincrement())
+  name        String    @db.VarChar(20)
+  description String    @db.VarChar(2000)
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+
+  @@map("category")
+}
+
+model FoodCategory {
+  id         Int @id @default(autoincrement())
+  foodId     Int @map("food_id")
+  categoryId Int @map("category_id")
+
+  @@map("food_category")
+}
+
+model Recipe {
+  id           Int       @id @default(autoincrement())
+  foodId       Int       @map("food_id")
+  authorId     Int       @map("author_id")
+  title        String    @db.VarChar(200)
+  thumbnailUrl String    @map("thumbnail_url")
+  coverUrl     String    @map("cover_url")
+  youtubeUrl   String?   @map("youtube_url")
+  description  String    @db.VarChar(2000)
+  difficulty   Int
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  deletedAt    DateTime? @map("deleted_at")
+
+  @@map("recipe")
+}
+
+model RecipeContent {
+  id          Int      @id @default(autoincrement())
+  recipeId    Int      @map("recipe_id")
+  order       Int
+  imageUrl    String   @map("image_url")
+  cookingTime Float    @map("cooking_time")
+  explain     String   @db.VarChar(1000)
+  timer       Float?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("recipe_content")
+}
+
+model RecipeReview {
+  id        Int       @id @default(autoincrement())
+  recipeId  Int       @map("recipe_id")
+  userId    Int       @map("user_id")
+  grade     Int
+  imageUrl  String?   @map("image_url")
+  comment   String
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  @@map("recipe_review")
+}
+
+model RecipeView {
+  id        Int       @id @default(autoincrement())
+  recipeId  Int       @map("recipe_id")
+  userId    Int       @map("user_id")
+  createdAt DateTime  @default(now()) @map("created_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  @@map("recipe_view")
+}
+
+model Ingredient {
+  id       Int     @id @default(autoincrement())
+  name     String
+  imageUrl String? @map("image_url")
+
+  @@map("ingredient")
+}
+
+model RecipeIngredient {
+  id           Int      @id @default(autoincrement())
+  recipeId     Int      @map("recipe_id")
+  ingredientId Int      @map("ingredient_id")
+  amount       Float
+  unit         String
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("recipe_ingredient")
+}
+
+model RecipeClip {
+  id                 Int       @id @default(autoincrement())
+  recipeId           Int       @map("recipe_id")
+  userId             Int       @map("user_id")
+  recipeClipFolderId Int?      @map("recipe_clip_folder_id")
+  order              Int
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+  deletedAt          DateTime? @map("deleted_at")
+
+  @@map("recipe_clip")
+}
+
+model RecipeClipFolder {
+  id        Int       @id @default(autoincrement())
+  userId    Int       @map("user_id")
+  name      String
+  order     Int
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  @@map("recipe_folder")
+}
+
+model ServiceInquiry {
+  id        Int                  @id @default(autoincrement())
+  userId    Int                  @map("user_id")
+  type      ServiceInquiryType
+  fileUrl   String               @map("file_url")
+  comment   String               @db.VarChar(2000)
+  status    ServiceInquiryStatus
+  createdAt DateTime             @default(now()) @map("created_at")
+  updatedAt DateTime             @updatedAt @map("updated_at")
+  deletedAt DateTime?            @map("deleted_at")
+
+  @@map("service_inquiry")
+}
+
+model ServiceInquiryReply {
+  id               Int       @id @default(autoincrement())
+  serviceInquiryId Int       @map("service_inquiry_id")
+  comment          String    @db.VarChar(2000)
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+  deletedAt        DateTime? @map("deleted_at")
+
+  @@map("service_inquiry_reply")
+}
+
+model ServiceReport {
+  id         Int                     @id @default(autoincrement())
+  userId     Int                     @map("user_id")
+  targetType ServiceReportTargetType @map("target_type")
+  targetId   Int                     @map("target_id")
+  fileUrl    String?                 @map("file_url")
+  comment    String
+  status     ServiceReportStatus
+  createdAt  DateTime                @default(now()) @map("created_at")
+  updatedAt  DateTime                @updatedAt @map("updated_at")
+  deletedAt  DateTime?               @map("deleted_at")
+
+  @@map("service_report")
+}
+
+model ServiceReportReply {
+  id              Int       @id @default(autoincrement())
+  serviceReportId Int       @map("service_report_id")
+  comment         String    @db.VarChar(2000)
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
+
+  @@map("service_report_reply")
+}
+
+enum ServiceInquiryType {
+  INQUIRY
+  IMPROVEMENT
+  ERROR_REPORT
+}
+
+enum ServiceInquiryStatus {
+  READY
+  COMPLETE
+}
+
+enum ServiceReportTargetType {
+  RECIPE
+  REVIEW
+  USER
+}
+
+enum ServiceReportStatus {
+  READY
+  COMPLETE
+}
