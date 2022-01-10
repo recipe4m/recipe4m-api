@@ -9,6 +9,8 @@ import extraModels from '@libs/swaggers/extra-models';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  console.log(process.env.GLOBAL_PREFIX);
+
   const globalPrefix = process.env.GLOBAL_PREFIX;
   if (globalPrefix) app.setGlobalPrefix(globalPrefix);
 
