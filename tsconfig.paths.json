@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@http-exceptions/*": ["./src/libs/http-exceptions/*"],
+      "@guards/*": ["./src/libs/guards/*"],
+      "@libs/*": ["./src/libs/*"],
+      "@prisma/*": ["./src/prisma/*"],
+      "@middlewares/*": ["./src/middlewares/*"],
+      "@src/*": ["./src/*"]
+    }
+  }
+}
